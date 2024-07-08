@@ -8,20 +8,38 @@
 #include <iostream>
 #include <optional>
 #include <fstream>
+#include <chrono>
 #include "MurmurHash3.h"
 
-// To encapsulate the results: Negative (N), Positive (P) and False-Positive (FP)
-typedef enum Result {N, P, FP} Result;
+// Stores percentage of false positives from a bloom filter search for a sequence of keys.
+// Stores times taken by a search with and without bloom filter for a sequence of keys.
+class Result {
+    public:
+        double err;
+        long long time_grep;
+        long long time_bloom;
+};
+
+// Represents a sequence N of |N| keys
+// A fraction `p` of the elements belong to a particular set.
+class Sequence {
+    public:
+        double p;
+        std::vector<std::string> data;
+        // To print sequence
+        friend std::ostream& operator<<(std::ostream &os, const Sequence &seq);
+};
 
 // Transforms CSV contents into a vector
 std::vector<std::string> vectorizeCSV(std::string filename);
 
-// Returns a uniform random sample of size k given a vector of strings S (using "Reservoir Sampling")
-std::vector<std::string> reservoirSampling(uint64_t k, std::vector<std::string> &S, std::optional<uint32_t> seed = std::nullopt);
 
-// Generates a random sample N of size n where p is the fraction of elements in N that belong to our target dataset.
-// @returns a vector of pairs `<string, bool>` where the first component corresponds to the element, and the second the bool value indicating if it belongs to the dataset or not
-std::vector<std::pair<std::string, bool>> generate_sample(uint64_t N, double p);
+// Returns a uniform random sample of size k given a vector of strings S (using "Reservoir Sampling")
+std::vector<std::string> reservoirSampling(uint64_t k, std::vector<std::string> S, std::optional<uint32_t> seed = std::nullopt);
+
+// Generates a random sequence N of size n where p is the fraction of elements in N that belong to our target dataset.
+// @returns `Sequence` instance that consists of two vectors: one for the N*p members of the set, and one for the rest
+Sequence generate_sequence(uint64_t N, double p, std::optional<uint32_t> seed = std::nullopt);
 
 // Encapsulates a murmurHash instance with a given seed and array size
 class MurmurHashInstance {

@@ -2,15 +2,26 @@
 using namespace std;
 
 
+
+ostream& operator<<(ostream &os, const Sequence &seq) {
+    os << "[ ";
+    for (uint64_t i = 0; i < seq.data.size() - 1; i++)
+        os << seq.data[i] << ", ";
+    os << seq.data.back() << " ]";
+    return os;
+}
+
 vector<string> vectorizeCSV(string filename) {
     // Open CSV file
     ifstream file(filename);
+    if (!file.is_open())
+        throw std::runtime_error("Failed to open file: " + filename);
     // Vectorized CSV contents
     vector<string> vec;
     // String to hold a line from the file
     string line;
     
-    std::getline(file, line);  //skip headers
+    std::getline(file, line, '\n');  //skip headers
     // Read file line by line
     while (getline(file, line, '\n'))
         vec.push_back(line);
@@ -19,7 +30,7 @@ vector<string> vectorizeCSV(string filename) {
     return vec;
 }
 
-vector<string> reservoirSampling(uint64_t k, vector<string> &S, optional<uint32_t> seed) {
+vector<string> reservoirSampling(uint64_t k, vector<string> S, optional<uint32_t> seed) {
     vector<string> reservoir(k);
     mt19937 rng;  // random number generator
     if (seed.has_value())
@@ -39,8 +50,21 @@ vector<string> reservoirSampling(uint64_t k, vector<string> &S, optional<uint32_
     return reservoir;
 }
 
-vector<pair<string, bool>> generate_sample(uint64_t N, double p) {
-    
+Sequence generate_sequence(uint64_t N, double p, optional<uint32_t> seed) {
+    if (!seed.has_value()) {
+        random_device rd;
+        seed = rd();
+    }
+    uint64_t member_size = round(N*p);
+    uint64_t outsider_size = N - member_size;
+    Sequence seq;
+    seq.p = p;
+    seq.data = move(reservoirSampling(member_size, vectorizeCSV("data/Popular-Baby-Names-Final.csv"), seed));
+    seq.data.reserve(N);
+    vector<string> outsider_sample = reservoirSampling(outsider_size, vectorizeCSV("data/Film-Names.csv"), seed);
+    // Insert (without copying) the elements outside the set into the sequence
+    seq.data.insert(seq.data.end(), make_move_iterator(outsider_sample.begin()), make_move_iterator(outsider_sample.end()));
+    return seq;
 }
 
 uint64_t MurmurHashInstance::hash(const std::string &key) const {
