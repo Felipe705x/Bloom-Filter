@@ -16,7 +16,9 @@ Además de implementar esta estructura, el proyecto ejecuta tests para comparar 
 
 ## Instrucciones de uso
 
-Para esta sección, necesitará que este ubicado en la carpeta `Bloom-Filter` tanto para compilar como para ejecutar. Esto debe cumplirse también para cualquier sesión de terminal usada en las siguientes subsecciones
+Para descargar el proyecto debe clonar este repositorio
+
+De ahora en adelante, necesitará que este ubicado en la carpeta `Bloom-Filter` tanto para compilar como para ejecutar. Esto debe cumplirse también para cualquier sesión de terminal usada en las siguientes subsecciones
 
 ### Como compilar:
 
