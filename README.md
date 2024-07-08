@@ -2,7 +2,7 @@
 
 ## Funcionalidad
 
-El proyecto implementa una estructura de datos probablistica conocida como *Bloom Filter* que permite verificar si un elemento fue insertado o no: pudiendo equivocarse al responder que el elemento sí fue insertado, pero no al decir que no lo fue.
+El proyecto implementa una estructura de datos probabilística conocida como *Bloom Filter* que permite verificar si un elemento fue insertado o no: pudiendo equivocarse al responder que el elemento sí fue insertado, pero no al decir que no lo fue.
 
 Además de implementar esta estructura, el proyecto ejecuta tests para comparar la eficiencia de una busqueda de secuencias de palabras entre un método de busqueda que utiliza el filtro y otro que no. Adicionalmente, se obtiene la tasa de falsos-positivos del filtro de Bloom para cada comparación.
 
