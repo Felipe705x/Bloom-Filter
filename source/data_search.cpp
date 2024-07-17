@@ -58,7 +58,7 @@ Result Data::bloom_performance_test(const Sequence &seq) {
     res.time_grep = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
     // Amount of searched elements that do not belong to the target set
     uint64_t outsider_size = seq.data.size() - static_cast<uint64_t>(round(seq.data.size()*seq.p));
-    if (outsider_size == 0)
+    if (fpositives == 0)
         res.err = 0.0;
     else
         res.err = ((fpositives/static_cast<double>(outsider_size)))*100.0;

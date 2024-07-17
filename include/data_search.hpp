@@ -35,3 +35,12 @@ class Data {
                 file.close();
         }
 };
+
+// Given an element x that was NOT inserted in the bloom filter, returns the probability of a false positive upon searching x through the filter.
+// @param n amount of DISTINCT elements inserted in the filter
+// @param m size of the bloom filter array
+// @param k amount of hash functions used by the filter
+// @note if the probability that x was not inserted in the bloom filter is 0, then this function is invalid
+inline double theoretical_error(uint64_t n, uint64_t m, uint64_t k) {
+    return pow(1.0 - pow((1.0 - 1.0/m),k*n), k)*100.0;
+}
